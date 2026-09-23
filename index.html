@@ -9,43 +9,48 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   :root{
-    --ink:#22271E; --ink-soft:#5B6355; --cream:#FAF7F0; --card:#FFFFFF; --line:#E7E1D3;
-    --dawn:#33506B; --dawn-deep:#233A4E; --butter:#D9A62E;
+    --ink:#1C2320; --ink-soft:#666F5E; --cream:#F7F4EB; --card:#FFFFFF; --line:#E6E0CF;
+    --dawn:#2C4A5E; --dawn-deep:#13232E; --dawn-mid:#1E3B4C; --butter:#C7962F;
     --ok:#3E7D56; --ok-bg:#E7F2EA; --pending:#B9821E; --pending-bg:#FBF0DC; --bad:#B23A34; --bad-bg:#FBE9E8;
     box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; margin:0}
-  .serif{font-family:'Fraunces',serif}
+  body{background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; margin:0; -webkit-font-smoothing:antialiased}
+  .serif{font-family:'Fraunces',serif;letter-spacing:-.01em}
+  h1.serif,h2.serif{letter-spacing:-.015em}
   ::-webkit-scrollbar{height:8px;width:8px}
   ::-webkit-scrollbar-thumb{background:#D8D2C2;border-radius:8px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px}
-  .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(28,35,32,.04),0 10px 24px -14px rgba(28,35,32,.10);transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease}
+  .card[onclick]:hover,tr[onclick]:hover td{box-shadow:0 10px 28px -10px rgba(28,35,32,.16);border-color:#D3CDBC}
+  .card[onclick]:hover{transform:translateY(-1px)}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:3.5px 11px;border-radius:999px;font-size:12px;font-weight:600}
   .b-ok{background:var(--ok-bg);color:var(--ok)}
   .b-pending{background:var(--pending-bg);color:var(--pending)}
   .b-bad{background:var(--bad-bg);color:var(--bad)}
-  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;color:#D9DDD1;font-size:14px;cursor:pointer;transition:background .15s}
-  .nav-item:hover{background:#2C4258}
-  .nav-item.active{background:var(--butter);color:#2B2200;font-weight:600}
-  .btn-primary{background:var(--dawn);color:#fff;border-radius:9px;padding:9px 16px;font-weight:600;font-size:14px;transition:opacity .15s}
-  .btn-primary:hover{opacity:.88}
-  .btn-ghost{background:transparent;border:1px solid var(--line);border-radius:9px;padding:9px 16px;font-weight:600;font-size:14px;color:var(--ink)}
-  .btn-ghost:hover{background:#F1EEE4}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9.5px 12px;border-radius:10px;color:#B7C2CB;font-size:13.5px;font-weight:500;cursor:pointer;transition:background .15s,color .15s}
+  .nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+  .nav-item.active{background:rgba(199,150,47,.16);color:#F0D593;font-weight:600}
+  .btn-primary{background:var(--dawn);color:#fff;border-radius:10px;padding:10px 18px;font-weight:600;font-size:14px;transition:opacity .15s,box-shadow .15s,transform .15s;box-shadow:0 4px 12px -3px rgba(19,35,46,.4)}
+  .btn-primary:hover{opacity:.92;box-shadow:0 6px 16px -3px rgba(19,35,46,.5);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 18px;font-weight:600;font-size:14px;color:var(--ink);transition:background .15s,border-color .15s}
+  .btn-ghost:hover{background:#F1EEE0;border-color:#D8D2C0}
   table{border-collapse:collapse;width:100%}
-  th{text-align:left;font-size:11.5px;letter-spacing:.02em;color:var(--ink-soft);font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line)}
-  td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px}
-  tr:hover td{background:#FBFAF6}
-  input,select{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;width:100%;background:#fff}
-  input:focus,select:focus{outline:2px solid var(--dawn);outline-offset:1px}
-  .fade{animation:fadeIn .22s ease}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  th{text-align:left;font-size:11px;letter-spacing:.03em;color:var(--ink-soft);font-weight:600;padding:11px 14px;border-bottom:1px solid var(--line);text-transform:uppercase}
+  td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:14px}
+  tr:hover td{background:#FBFAF5}
+  input,select{border:1px solid var(--line);border-radius:9px;padding:9.5px 12px;font-size:14px;width:100%;background:#fff;transition:border-color .15s,box-shadow .15s}
+  input:focus,select:focus{outline:none;border-color:var(--dawn);box-shadow:0 0 0 3px rgba(44,74,94,.12)}
+  .fade{animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
   .toast{animation:slideUp .25s ease}
   @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  .kpi-num{font-family:'Fraunces',serif;font-size:28px;font-weight:600}
+  .kpi-num{font-family:'Fraunces',serif;font-size:29px;font-weight:600;letter-spacing:-.02em}
   .scrollx{overflow-x:auto}
-  .map-mock{background:linear-gradient(135deg,#EEF2ED 0%,#E4EBE3 100%);position:relative;border-radius:14px;overflow:hidden}
+  .map-mock{background:linear-gradient(135deg,#EEF2ED 0%,#E4EBE3 100%);position:relative;border-radius:16px;overflow:hidden}
   .dot{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.08)}
+  .hero-grid{background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:38px 38px}
+  .stat-chip{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 14px;background:rgba(255,255,255,.04)}
 </style>
 </head>
 <body>
@@ -116,48 +121,69 @@ function toast(msg,ok=true){
   setTimeout(()=>{el.style.transition="opacity .3s";el.style.opacity="0";setTimeout(()=>el.remove(),300)},2200);
 }
 function render(){document.getElementById("app").innerHTML=state.role?  (state.role==="admin"?adminView(): state.role==="delivery"?deliveryView():customerView()) : loginView();}
+function skeletonRow(){return `<div class="card p-4 mb-3"><div class="h-3 w-1/3 rounded mb-3" style="background:#EEE9DB"></div><div class="h-6 w-1/2 rounded" style="background:#EEE9DB"></div></div>`}
+function selectRole(role){
+  const app=document.getElementById("app");
+  app.innerHTML=`<div class="min-h-screen flex items-center justify-center" style="background:var(--cream)"><div class="w-full max-w-sm px-6">${skeletonRow()}${skeletonRow()}${skeletonRow()}</div></div>`;
+  setTimeout(()=>{state.role=role;render();},380);
+}
 
 /* ---------- LOGIN ---------- */
 function loginView(){
-  return `<div class="min-h-screen flex items-center justify-center px-4" style="background:radial-gradient(circle at 20% 15%,#33506B 0%,#20364a 55%,#1a2c3d 100%)">
-    <div class="w-full max-w-sm fade">
-      <div class="text-center mb-7">
-        <div class="inline-flex items-center gap-2 mb-3">
-          <span style="font-size:26px">🥛</span>
-          <span class="serif text-white text-2xl">Dhaara</span>
+  return `<div class="min-h-screen flex" style="background:var(--cream)">
+    <div class="hidden lg:flex flex-col justify-between w-[46%] p-12 relative overflow-hidden hero-grid" style="background:linear-gradient(160deg,var(--dawn-deep) 0%,var(--dawn-mid) 65%,#26445a 100%)">
+      <div class="relative z-10">
+        <div class="flex items-center gap-2 mb-16">
+          <span style="font-size:22px">🥛</span><span class="serif text-white text-xl">Dhaara</span>
         </div>
-        <p class="text-[#C7D2DC] text-sm">Smart Milk Delivery Management</p>
+        <h1 class="serif text-white text-[42px] leading-[1.12] mb-5 max-w-md">Every litre, every route, every rupee — on one screen.</h1>
+        <p class="text-[#AEC0CC] text-[15px] max-w-sm leading-relaxed">The operations platform built for dairies running daily doorstep delivery at scale — customers, routes, GPS, billing and collections in one place.</p>
       </div>
-      <div class="card p-6">
-        <label class="text-xs font-semibold text-[color:var(--ink-soft)]">Phone or email</label>
-        <input class="mb-3 mt-1" placeholder="you@dhaara.in" value="admin@dhaara.in">
-        <label class="text-xs font-semibold text-[color:var(--ink-soft)]">Password</label>
-        <input class="mb-3 mt-1" type="password" value="••••••••">
-        <div class="flex items-center justify-between mb-4">
-          <label class="flex items-center gap-2 text-xs text-[color:var(--ink-soft)]"><input type="checkbox" checked class="w-3.5 h-3.5">Remember me</label>
-          <a class="text-xs text-[color:var(--dawn)] font-medium" href="#">Forgot password?</a>
+      <div class="relative z-10 grid grid-cols-3 gap-3">
+        <div class="stat-chip"><div class="text-white serif text-2xl">1,200+</div><div class="text-[#9FB0BE] text-[11px] mt-0.5">Households served daily</div></div>
+        <div class="stat-chip"><div class="text-white serif text-2xl">99.2%</div><div class="text-[#9FB0BE] text-[11px] mt-0.5">On-time delivery rate</div></div>
+        <div class="stat-chip"><div class="text-white serif text-2xl">3</div><div class="text-[#9FB0BE] text-[11px] mt-0.5">Routes live right now</div></div>
+      </div>
+    </div>
+    <div class="flex-1 flex items-center justify-center px-4 py-10">
+      <div class="w-full max-w-sm fade">
+        <div class="lg:hidden text-center mb-7">
+          <div class="inline-flex items-center gap-2 mb-2"><span style="font-size:24px">🥛</span><span class="serif text-2xl">Dhaara</span></div>
+          <p class="text-[color:var(--ink-soft)] text-sm">Smart Milk Delivery Management</p>
         </div>
-        <button onclick="toast('Use a demo role below to continue')" class="btn-primary w-full">Log in</button>
-      </div>
-      <div class="mt-5">
-        <p class="text-[#9FB0BE] text-xs mb-2 text-center tracking-wide">Demo access</p>
-        <div class="grid grid-cols-3 gap-2">
-          ${roleBtn("admin","Admin","🧑‍💼")}
-          ${roleBtn("delivery","Delivery","🛵")}
-          ${roleBtn("customer","Customer","🏠")}
+        <h2 class="serif text-2xl mb-1 hidden lg:block">Welcome back</h2>
+        <p class="text-sm text-[color:var(--ink-soft)] mb-6 hidden lg:block">Log in to manage today's operations.</p>
+        <div class="card p-6">
+          <label class="text-xs font-semibold text-[color:var(--ink-soft)]">Phone or email</label>
+          <input class="mb-3 mt-1.5" placeholder="you@dhaara.in" value="admin@dhaara.in">
+          <label class="text-xs font-semibold text-[color:var(--ink-soft)]">Password</label>
+          <input class="mb-3 mt-1.5" type="password" value="••••••••">
+          <div class="flex items-center justify-between mb-5">
+            <label class="flex items-center gap-2 text-xs text-[color:var(--ink-soft)]"><input type="checkbox" checked class="w-3.5 h-3.5">Remember me</label>
+            <a class="text-xs text-[color:var(--dawn)] font-medium" href="#">Forgot password?</a>
+          </div>
+          <button onclick="toast('Use a demo role below to continue')" class="btn-primary w-full">Log in</button>
+        </div>
+        <div class="mt-6">
+          <div class="flex items-center gap-3 mb-4"><div class="h-px flex-1" style="background:var(--line)"></div><p class="text-[color:var(--ink-soft)] text-xs tracking-wide">Demo access</p><div class="h-px flex-1" style="background:var(--line)"></div></div>
+          <div class="grid grid-cols-3 gap-2">
+            ${roleBtn("admin","Admin","🧑‍💼")}
+            ${roleBtn("delivery","Delivery","🛵")}
+            ${roleBtn("customer","Customer","🏠")}
+          </div>
         </div>
       </div>
     </div>
   </div>`;
 }
 function roleBtn(role,label,icon){
-  return `<button onclick="state.role='${role}';render()" class="card py-3 text-center hover:border-[color:var(--dawn)] transition">
-    <div class="text-lg">${icon}</div><div class="text-xs font-semibold mt-1">${label}</div></button>`;
+  return `<button onclick="selectRole('${role}')" class="card py-3.5 text-center hover:border-[color:var(--dawn)] transition">
+    <div class="text-lg">${icon}</div><div class="text-xs font-semibold mt-1.5">${label}</div></button>`;
 }
 function logoutBtn(light){return `<button onclick="state={role:null,admView:'dashboard',custSel:null,routeSel:null,delStopIdx:0,delStarted:false,delNavOpen:false,custTab:'home',search:'',routeFilter:'All',statusFilter:'All'};render()" class="flex items-center gap-1 text-xs font-semibold ${light?'text-[color:var(--dawn)]':'text-[#D9DDD1] hover:text-white'}">← Back to login</button>`}
 
 /* ---------- ADMIN ---------- */
-const ADM_NAV=[["dashboard","Dashboard","🏠"],["customers","Customers","👥"],["routes","Routes","🧭"],["deliveries","Today's Deliveries","📦"],["tracking","Live Tracking","📍"],["requests","Requests","📋"],["billing","Billing & Payments","💳"],["reports","Reports","📊"],["notifications","Notifications","🔔"],["settings","Settings","⚙️"]];
+const ADM_NAV=[["dashboard","Dashboard","🏠"],["customers","Customers","👥"],["routes","Routes","🧭"],["deliveries","Today's Deliveries","📦"],["quantity","Today's Quantity","🧮"],["tracking","Live Tracking","📍"],["requests","Requests","📋"],["billing","Billing & Payments","💳"],["reports","Reports","📊"],["notifications","Notifications","🔔"],["settings","Settings","⚙️"]];
 function adminView(){
   const delivered=customers.filter(c=>c.status==="Delivered").length;
   const pending=customers.filter(c=>c.status==="Pending").length;
@@ -166,8 +192,8 @@ function adminView(){
   const sales=customers.filter(c=>c.status==="Delivered").reduce((s,c)=>s+c.today*c.rate,0);
   const outstanding=customers.reduce((s,c)=>s+c.outstanding,0);
   return `<div class="flex min-h-screen">
-    <aside class="hidden md:flex flex-col w-60 shrink-0 p-4" style="background:var(--dawn-deep)">
-      <div class="flex items-center gap-2 px-2 mb-6"><span style="font-size:20px">🥛</span><span class="serif text-white text-lg">Dhaara</span></div>
+    <aside class="hidden md:flex flex-col w-64 shrink-0 p-4" style="background:linear-gradient(180deg,var(--dawn-deep) 0%,#182B37 100%)">
+      <div class="flex items-center gap-2 px-2 mb-8 pt-1"><span style="font-size:20px">🥛</span><span class="serif text-white text-lg">Dhaara</span></div>
       <nav class="flex flex-col gap-1 flex-1">
         ${ADM_NAV.map(([k,l,i])=>`<div class="nav-item ${state.admView===k?'active':''}" onclick="state.admView='${k}';render()"><span>${i}</span>${l}</div>`).join("")}
       </nav>
@@ -194,6 +220,7 @@ function admBody(k){
   if(state.admView==="customers")return admCustomers();
   if(state.admView==="routes")return admRoutes();
   if(state.admView==="deliveries")return admDeliveries();
+  if(state.admView==="quantity")return admQuantity();
   if(state.admView==="tracking")return admTracking();
   if(state.admView==="requests")return admRequests();
   if(state.admView==="billing")return admBilling();
@@ -378,7 +405,7 @@ function admCustomerProfile(){
           <div class="flex justify-between"><span class="text-[color:var(--ink-soft)]">Current bill</span><span>${fmt(Math.round(c.regular*30*c.rate))}</span></div>
           <div class="flex justify-between"><span class="text-[color:var(--ink-soft)]">Balance due</span><span class="${c.outstanding>0?'text-[color:var(--bad)] font-semibold':''}">${fmt(c.outstanding)}</span></div>
         </div>
-        <button class="btn-primary text-xs w-full mt-4" onclick="toast('Bill preview not built in prototype',false)">View bill</button>
+        <button class="btn-primary text-xs w-full mt-4" onclick="openBillPreview('${c.id}')">View bill</button>
       </div>
     </div>
   </div>`;
@@ -471,6 +498,28 @@ function handleRequest(id,approve){
   const r=requests.find(x=>x.id===id);r.status=approve?"approved":"rejected";
   if(approve){const c=customers.find(x=>x.id===r.cust);if(c)c.today=r.req;}
   render();toast(approve?"Request approved":"Request rejected",approve);
+}
+const qtyReasons={inc:["Extra requirement","Guests at home","Festival demand"],dec:["Temporary change","Travelling","Reduced consumption"],cancel:["Customer cancellation","Out of town","Health reasons"]};
+function admQuantity(){
+  const changed=customers.filter(c=>c.today!==c.regular);
+  const cutoffPassed=true;
+  return `<div class="fade">
+    <div class="flex items-center justify-between mb-1"><h1 class="serif text-2xl">Today's quantity changes</h1>
+    <span class="badge ${cutoffPassed?'b-bad':'b-ok'}">${cutoffPassed?'Cutoff passed · 10:00 PM':'Accepting changes'}</span></div>
+    <p class="text-sm text-[color:var(--ink-soft)] mb-5">${changed.length} customers adjusted their regular quantity for 23 September 2026.</p>
+    <div class="card scrollx">${changed.length===0?emptyState("No quantity changes today","Every customer is on their regular order."):`
+    <table><thead><tr><th>Customer</th><th>Regular</th><th>Change</th><th>Today's quantity</th><th>Reason</th><th>Status</th></tr></thead><tbody>
+    ${changed.map(c=>{
+      const diff=c.today-c.regular;
+      const kind=c.today===0?"cancel":diff>0?"inc":"dec";
+      const reason=qtyReasons[kind][c.id.charCodeAt(c.id.length-1)%3];
+      return `<tr><td>${c.id} ${c.name}</td><td>${c.regular} L</td>
+      <td class="font-semibold" style="color:${kind==='inc'?'var(--ok)':kind==='dec'?'var(--pending)':'var(--bad)'}">${kind==='cancel'?'Cancel':(diff>0?'+':'')+diff.toFixed(1)+' L'}</td>
+      <td>${c.today} L</td><td class="text-[color:var(--ink-soft)]">${reason}</td>
+      <td><span class="badge ${kind==='cancel'?'b-bad':'b-ok'}">${kind==='cancel'?'Cancelled':'Approved'}</span></td></tr>`;
+    }).join("")}
+    </tbody></table>`}</div>
+  </div>`;
 }
 function admBilling(){
   return `<div class="fade">
@@ -591,6 +640,7 @@ function deliveryHome(mine,delivered){
 function deliveryStop(mine,cur,pending){
   const idx=mine.findIndex(c=>c.id===cur.id);
   return mobileShell(`<div class="p-5 fade">
+    <button class="text-xs font-semibold mb-3" style="color:var(--dawn)" onclick="exitRoute()">← Back to route home</button>
     <div class="flex justify-between items-center mb-4"><span class="text-xs font-semibold text-[color:var(--ink-soft)]">Stop ${cur.stop} of ${mine.length}</span><span class="text-xs font-semibold" style="color:var(--dawn)">${pending.length} remaining</span></div>
     <div class="card p-5 mb-4">
       <div class="text-xs text-[color:var(--ink-soft)] mb-1">Current stop</div>
@@ -605,8 +655,10 @@ function deliveryStop(mine,cur,pending){
     <button class="btn-primary w-full py-3" onclick="openConfirmDelivery('${cur.id}')">Mark delivered</button>
   </div>`,"Delivery · Ravi");
 }
+function exitRoute(){state.delStarted=false;state.delNavOpen=false;state.delStopIdx=0;render();}
 function deliveryNav(cur){
   return mobileShell(`<div class="p-5 fade">
+    <button class="text-xs font-semibold mb-3" style="color:var(--dawn)" onclick="state.delNavOpen=false;render()">← Back to stop</button>
     <div class="text-sm font-semibold mb-3">Navigating to ${cur.name}</div>
     ${mapMock()}
     <div class="card p-4 mt-4 flex justify-between items-center">
@@ -712,6 +764,45 @@ function custHistory(c){
   ${hist.map(h=>`<div class="card p-4 flex justify-between items-center"><div><div class="font-semibold text-sm">${h[0]}</div><div class="text-xs text-[color:var(--ink-soft)]">${h[3]}</div></div><div class="text-right"><div class="font-semibold text-sm">${h[1]}</div>${statusBadge(h[2])}</div></div>`).join("")}
   </div>`;
 }
+function billMonthTable(c){
+  const days=[22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1];
+  return days.map(d=>{const q=Math.random()<0.1?0:c.regular; return {d,q}}).filter(r=>r.q>0);
+}
+function openBillPreview(id,from){
+  const c=customers.find(x=>x.id===id);
+  const rows=billMonthTable(c);
+  const total=rows.reduce((s,r)=>s+r.q,0);
+  const amount=Math.round(total*c.rate);
+  const m=document.createElement("div");m.id="modalRoot";
+  m.innerHTML=`<div class="fixed inset-0 bg-black/40 z-50 flex items-start md:items-center justify-center p-3 overflow-y-auto" onclick="if(event.target===this)closeModal()">
+  <div class="card w-full max-w-lg p-0 fade my-4 overflow-hidden">
+    <div class="p-6" style="background:var(--dawn-deep)">
+      <div class="flex justify-between items-start">
+        <div><div class="text-white serif text-lg">Dhaara Dairy Co.</div><div class="text-[#C7D2DC] text-xs mt-0.5">Vellore, Tamil Nadu · GSTIN placeholder</div></div>
+        <div class="text-right text-white text-xs"><div class="font-semibold">INVOICE</div><div class="text-[#C7D2DC]">August 2026</div></div>
+      </div>
+    </div>
+    <div class="p-6">
+      <div class="flex justify-between text-sm mb-4">
+        <div><div class="text-[color:var(--ink-soft)] text-xs">Billed to</div><div class="font-semibold">${c.name}</div><div class="text-[color:var(--ink-soft)] text-xs">${c.id} · ${c.addr}</div></div>
+        <div class="text-right"><div class="text-[color:var(--ink-soft)] text-xs">Route</div><div class="font-semibold">${c.route} · Stop ${c.stop}</div></div>
+      </div>
+      <div class="scrollx" style="max-height:220px;overflow-y:auto">
+      <table><thead><tr><th>Date</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td>${r.d} Aug</td><td>${r.q} L</td><td>${fmt(c.rate)}</td><td>${fmt(Math.round(r.q*c.rate))}</td></tr>`).join("")}
+      </tbody></table></div>
+      <dl class="text-sm flex flex-col gap-1.5 mt-4 pt-4 border-t border-[color:var(--line)]">
+        <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">Total litres</dt><dd>${total.toFixed(1)} L</dd></div>
+        <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">This month's bill</dt><dd>${fmt(amount)}</dd></div>
+        <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">Previous balance</dt><dd>${fmt(200)}</dd></div>
+        <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">Payments received</dt><dd>−${fmt(1500)}</dd></div>
+        <div class="flex justify-between font-semibold pt-2 border-t border-[color:var(--line)]"><dt>Balance due</dt><dd style="color:var(--bad)">${fmt(c.outstanding||590)}</dd></div>
+      </dl>
+      <div class="flex gap-2 mt-5"><button class="btn-ghost flex-1" onclick="closeModal()">Close</button><button class="btn-primary flex-1" onclick="toast('PDF download simulated for this build')">Download PDF</button></div>
+    </div>
+  </div></div>`;
+  document.body.appendChild(m);
+}
 function custBilling(c){
   return `<h1 class="serif text-2xl mb-4">Billing</h1>
   <div class="card p-5 mb-4">
@@ -724,7 +815,7 @@ function custBilling(c){
       <div class="flex justify-between"><dt>Payment</dt><dd>${fmt(1500)}</dd></div>
       <div class="flex justify-between font-semibold pt-2 border-t border-[color:var(--line)]"><dt>Balance due</dt><dd style="color:var(--bad)">${fmt(590)}</dd></div>
     </dl>
-    <div class="flex gap-2 mt-4"><button class="btn-ghost text-xs flex-1" onclick="toast('Bill preview not built in prototype',false)">View bill</button><button class="btn-ghost text-xs flex-1" onclick="toast('PDF export not built in prototype',false)">Download PDF</button></div>
+    <div class="flex gap-2 mt-4"><button class="btn-ghost text-xs flex-1" onclick="openBillPreview('${c.id}')">View bill</button><button class="btn-ghost text-xs flex-1" onclick="openBillPreview('${c.id}')">Download PDF</button></div>
   </div>`;
 }
 
