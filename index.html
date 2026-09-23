@@ -202,6 +202,21 @@ function adminView(){
       </div>
     </aside>
     <main class="flex-1 min-w-0">
+      <div class="hidden md:flex items-center justify-between px-8 pt-6 pb-2">
+        <div class="relative max-w-xs w-full">
+          <input placeholder="Search customers, routes, invoices…" class="pl-9 text-sm" onclick="state.admView='customers';render();setTimeout(()=>document.querySelector('input[placeholder=\\'Search name or ID\\']')?.focus(),0)">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[color:var(--ink-soft)] text-sm">⌕</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <button onclick="state.admView='notifications';render()" class="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-[#F1EEE0]">
+            <span>🔔</span>${adminNotifications.some(n=>n.unread)?'<span class="absolute top-1.5 right-2 w-2 h-2 rounded-full" style="background:var(--bad)"></span>':''}
+          </button>
+          <div class="flex items-center gap-2 pl-3 border-l border-[color:var(--line)]">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-semibold" style="background:var(--dawn)">A</div>
+            <div class="text-xs"><div class="font-semibold">Admin</div><div class="text-[color:var(--ink-soft)]">Office</div></div>
+          </div>
+        </div>
+      </div>
       <div class="md:hidden flex items-center justify-between px-4 pt-3">
         ${logoutBtn(true)}
         <span class="text-xs font-semibold text-[color:var(--ink-soft)]">Admin · Office</span>
@@ -209,7 +224,7 @@ function adminView(){
       <div class="md:hidden card m-3 p-2 flex gap-2 overflow-x-auto">
         ${ADM_NAV.map(([k,l,i])=>`<button onclick="state.admView='${k}';render()" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap ${state.admView===k?'bg-[color:var(--dawn)] text-white':'bg-[#F1EEE4]'}">${i} ${l}</button>`).join("")}
       </div>
-      <div class="p-4 md:p-8 max-w-7xl">
+      <div class="p-4 md:px-8 md:pb-8 md:pt-4 max-w-7xl">
         ${admBody({delivered,pending,cancelled,milk,sales,outstanding})}
       </div>
     </main>
@@ -388,7 +403,7 @@ function admCustomerProfile(){
           <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">Route / stop</dt><dd>${c.route} · #${c.stop}</dd></div>
           <div class="flex justify-between"><dt class="text-[color:var(--ink-soft)]">Regular quantity</dt><dd>${c.regular} L</dd></div>
         </dl>
-        <div class="flex gap-2 mt-4"><button class="btn-ghost text-xs flex-1" onclick="toast('Edit form not built in prototype',false)">Edit</button><button class="btn-ghost text-xs flex-1" onclick="toast('Route change not built in prototype',false)">Change route</button></div>
+        <div class="flex gap-2 mt-4"><button class="btn-ghost text-xs flex-1" onclick="openEditCustomer('${c.id}')">Edit</button><button class="btn-ghost text-xs flex-1" onclick="toast('Route change not built in prototype',false)">Change route</button></div>
       </div>
       <div class="card p-5">
         <div class="text-sm font-semibold mb-3">Today's delivery</div>
@@ -521,10 +536,64 @@ function admQuantity(){
     </tbody></table>`}</div>
   </div>`;
 }
+function openRecordPayment(){
+  const opts=customers.filter(c=>c.outstanding>0);
+  const m=document.createElement("div");m.id="modalRoot";
+  m.innerHTML=`<div class="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this)closeModal()">
+  <div class="card w-full sm:max-w-md rounded-b-none sm:rounded-b-[16px] p-6 fade">
+    <h2 class="serif text-xl mb-4">Record payment</h2>
+    <div class="flex flex-col gap-3">
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Customer</label>
+        <select id="rpCust" onchange="document.getElementById('rpAmt').value=customers.find(x=>x.id===this.value).outstanding||0">
+        ${opts.length?opts.map(c=>`<option value="${c.id}">${c.id} — ${c.name} (₹${c.outstanding} due)</option>`).join(""):`<option value="">No outstanding balances</option>`}
+        </select></div>
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Amount (₹)</label><input id="rpAmt" type="number" value="${opts[0]?opts[0].outstanding:0}"></div>
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Method</label><select id="rpMethod"><option>UPI</option><option>Cash</option><option>Bank transfer</option></select></div>
+    </div>
+    <div class="flex gap-2 mt-5"><button class="btn-ghost flex-1" onclick="closeModal()">Cancel</button><button class="btn-primary flex-1" onclick="recordPayment()">Record payment</button></div>
+  </div></div>`;
+  document.body.appendChild(m);
+}
+function recordPayment(){
+  const custId=document.getElementById("rpCust").value;
+  if(!custId){closeModal();toast("No customer selected",false);return;}
+  const amt=parseFloat(document.getElementById("rpAmt").value)||0;
+  const method=document.getElementById("rpMethod").value;
+  const c=customers.find(x=>x.id===custId);
+  const applied=Math.min(amt,c.outstanding);
+  c.outstanding=Math.max(0,c.outstanding-amt);
+  payments.unshift({cust:c.id,name:c.name,bill:Math.round(applied+c.outstanding),amount:amt,date:"23 Sep",method,balance:c.outstanding});
+  activity.unshift({t:new Date().toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"}),txt:`₹${amt.toLocaleString("en-IN")} received from ${c.id}`});
+  closeModal();render();toast("Payment recorded successfully");
+}
+function openEditCustomer(id){
+  const c=customers.find(x=>x.id===id);
+  const m=document.createElement("div");m.id="modalRoot";
+  m.innerHTML=`<div class="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onclick="if(event.target===this)closeModal()">
+  <div class="card w-full sm:max-w-md rounded-b-none sm:rounded-b-[16px] p-6 fade">
+    <h2 class="serif text-xl mb-4">Edit customer</h2>
+    <div class="flex flex-col gap-3">
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Name</label><input id="ecName" value="${c.name}"></div>
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Phone</label><input id="ecPhone" value="${c.phone}"></div>
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Address</label><input id="ecAddr" value="${c.addr}"></div>
+      <div><label class="text-xs font-semibold text-[color:var(--ink-soft)]">Regular quantity (L)</label><input id="ecQty" type="number" step="0.5" value="${c.regular}"></div>
+    </div>
+    <div class="flex gap-2 mt-5"><button class="btn-ghost flex-1" onclick="closeModal()">Cancel</button><button class="btn-primary flex-1" onclick="saveEditCustomer('${c.id}')">Save changes</button></div>
+  </div></div>`;
+  document.body.appendChild(m);
+}
+function saveEditCustomer(id){
+  const c=customers.find(x=>x.id===id);
+  c.name=document.getElementById("ecName").value||c.name;
+  c.phone=document.getElementById("ecPhone").value||c.phone;
+  c.addr=document.getElementById("ecAddr").value||c.addr;
+  c.regular=parseFloat(document.getElementById("ecQty").value)||c.regular;
+  closeModal();render();toast("Customer updated successfully");
+}
 function admBilling(){
   return `<div class="fade">
     <h1 class="serif text-2xl mb-5">Payments</h1>
-    <div class="flex justify-end mb-3"><button class="btn-primary" onclick="toast('Payment recorded successfully')">+ Record payment</button></div>
+    <div class="flex justify-end mb-3"><button class="btn-primary" onclick="openRecordPayment()">+ Record payment</button></div>
     <div class="card scrollx"><table><thead><tr><th>Customer</th><th>Bill</th><th>Amount</th><th>Date</th><th>Method</th><th>Balance</th></tr></thead><tbody>
     ${payments.map(p=>`<tr><td>${p.name}<div class="text-xs text-[color:var(--ink-soft)]">${p.cust}</div></td><td>${fmt(p.bill)}</td><td>${fmt(p.amount)}</td><td>${p.date}</td><td>${p.method}</td><td class="${p.balance>0?'text-[color:var(--bad)] font-semibold':''}">${fmt(p.balance)}</td></tr>`).join("")}
     </tbody></table></div>
