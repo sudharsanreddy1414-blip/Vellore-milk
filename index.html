@@ -812,7 +812,7 @@ function confirmDelivered(id){
 }
 function cancelToday(){
   const c=myCust(); c.today=0; c.status='cancelled'; cancelled++; pending=90-delivered-cancelled;
-  activity.unshift({ico:'×',bg:'var(--red-bg)',fg:'var(--red)',text:c.id+' cancelled today\\'s delivery',time:'now'});
+  activity.unshift({ico:'×',bg:'var(--red-bg)',fg:'var(--red)',text:c.id+' cancelled today\'s delivery',time:'now'});
   closeOv(); toast('Delivery cancelled for today'); go('c-home',false);
 }
 </script>
